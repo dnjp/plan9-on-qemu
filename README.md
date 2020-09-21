@@ -1,7 +1,7 @@
 # Running 9front in Qemu
 
 This guide assumes you are running a x86-64 Linux machine and that you have an
-up to date version of Qemu installed.
+up to date version of Qemu and curl installed.
 
 In the shell examples below, any snippet starting with `$: ` means that it
 should be executed on your Linux machine. Any snippet starting with `%: ` should
