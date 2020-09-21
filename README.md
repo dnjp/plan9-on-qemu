@@ -283,9 +283,6 @@ the version we downloaded to that target directory:
 # bind downloaded go source to system go source
 %: bind -c go /sys/lib/go/amd64-1.14.7
 ```
-
-# change directories to the new location so GOROOT gets set properly when building
-
 In order to ensure that the GOROOT is set correctly, we will change to the
 target directory when building Go and tell it where to locate our bootstrap
 installation:
@@ -316,9 +313,9 @@ cleanup:
 
 ```
 %: unmount /sys/lib/go/amd64-1.14.7
-%: dircp /tmp/go /sys/lib/amd64-1.14.7
+%: dircp /tmp/go /sys/lib/go/amd64-1.14.7
+%: cp /sys/lib/go/amd64-1.14.7/bin/* /amd64/bin
 %: unmount /tmp
-%: cp /sys/lib/amd64-1.14.7/bin/* /amd64/bin
 ```
 
 Next you will want to add a line like the following to your `profile` so that
@@ -328,9 +325,5 @@ you can run executables in your GOPATH.
 bind -a $home/go/bin /bin
 ```
 
-This is the equivalent of
-
-```
-export PATH=$PATH:/some/path
-```
+This is the equivalent of `export PATH=$PATH:/some/path` on Unix.
 
