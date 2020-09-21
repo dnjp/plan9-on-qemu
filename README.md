@@ -163,8 +163,8 @@ Reboot the VM with the `fshalt` command:
 
 ## Setup Git
 
-First, we need to obtain `git9`, a git implementation for Plan 9 by Ori
-Bernstein (orib). We will do this in two parts. First, we'll get a bootstrap
+First, we need to obtain [git9](https://github.com/oridb/git9) a git implementation for Plan 9 by Ori
+Bernstein ([oridb](https://github.com/oridb)). We will do this in two parts. First, we'll get a bootstrap
 version which will give us the `git` command and then we will setup the git9
 repository in a place that you can easily update it in the future.
 
