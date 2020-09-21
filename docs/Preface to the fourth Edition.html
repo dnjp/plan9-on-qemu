@@ -1,0 +1,170 @@
+
+<!-- saved from url=(0091)https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/sys/man/preface4.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./Preface to the fourth Edition_files/analytics.js" type="text/javascript"></script><script data-dapp-detection="">
+(function() {
+  let alreadyInsertedMetaTag = false
+
+  function __insertDappDetected() {
+    if (!alreadyInsertedMetaTag) {
+      const meta = document.createElement('meta')
+      meta.name = 'dapp-detected'
+      document.head.appendChild(meta)
+      alreadyInsertedMetaTag = true
+    }
+  }
+
+  if (window.hasOwnProperty('web3')) {
+    // Note a closure can't be used for this var because some sites like
+    // www.wnyc.org do a second script execution via eval for some reason.
+    window.__disableDappDetectionInsertion = true
+    // Likely oldWeb3 is undefined and it has a property only because
+    // we defined it. Some sites like wnyc.org are evaling all scripts
+    // that exist again, so this is protection against multiple calls.
+    if (window.web3 === undefined) {
+      return
+    }
+    __insertDappDetected()
+  } else {
+    var oldWeb3 = window.web3
+    Object.defineProperty(window, 'web3', {
+      configurable: true,
+      set: function (val) {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        oldWeb3 = val
+      },
+      get: function () {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        return oldWeb3
+      }
+    })
+  }
+})()</script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app100.us.archive.org';v.server_ms=588;archive_analytics.send_pageview({});});</script><script type="text/javascript" src="./Preface to the fourth Edition_files/playback.bundle.js" charset="utf-8"></script>
+<script type="text/javascript" src="./Preface to the fourth Edition_files/wombat.js" charset="utf-8"></script>
+<script type="text/javascript">
+  __wm.init("https://web.archive.org/web");
+  __wm.wombat("http://plan9.bell-labs.com/sys/man/preface4.html","20150205030051","https://web.archive.org/web/","web","/_static/",
+	      "1423105251","plan9.bell-labs.com");
+</script><meta name="dapp-detected">
+<link rel="stylesheet" type="text/css" href="./Preface to the fourth Edition_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./Preface to the fourth Edition_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+<title>
+preface4
+</title>
+</head><body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#330088" alink="#FF0044"><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  /*min-width:800px !important;*/
+}
+</style>
+<script>__wm.rw(0);</script>
+<div id="wm-ipp-base" lang="en" style="display: block; direction: ltr;">
+</div><div id="donato" style="position:relative;width:100%;">
+  <div id="donato-base">
+    <iframe id="donato-if" src="./Preface to the fourth Edition_files/donate.html" scrolling="no" frameborder="0" style="width:100%; height:100%">
+    </iframe>
+  </div>
+</div><script type="text/javascript">
+__wm.bt(625,27,25,2,"web","http://plan9.bell-labs.com/sys/man/preface4.html","20150205030051",1996,"/_static/",["/_static/css/banner-styles.css?v=NHuXCfBH","/_static/css/iconochive.css?v=qtvMKcIJ"]);
+  __wm.rw(1);
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+<h1>Preface to the Fourth (2002) Edition
+</h1>
+<br> <br>
+Plan 9 continues to grow and adapt.
+The fourth major release of the system
+incorporates a number of changes, but the most central
+is the conversion to a new version of the 9P file system
+protocol.
+This new version was motivated by a desire to support
+files with name elements longer than 27 bytes (the old
+<tt>NAMELEN</tt>),
+but the opportunity was taken to change a number of other things
+about the protocol,
+making it more efficient, more flexible, and easier to encapsulate.
+One simple but indispensable new feature made possible by the protocol
+change is that the system now records the user who last modified a file;
+try
+<tt>ls</tt>
+<tt>-m</tt>
+to identify the culprit.
+<br> <br>
+Many aspects of system security have been improved.
+The new security agent
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/4/factotum"><i>factotum</i>(4)
+</a>maintains user passwords, while
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/8/secstore"><i>secstore</i>(8)
+</a>keeps them safe and enables single sign-on to multiple domains and machines
+using a variety of secure protocols and services.
+<br> <br>
+Throughout the system, components have been rewritten and interfaces
+modified to eliminate restrictions, improve performance, and clarify design.
+The full list is too long to include here, but significant changes have occurred
+in a number of system calls
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/wait">(<i>wait</i>(2),
+</a><a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/stat"><i>stat</i>(2),
+</a><a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/mount"><i>mount</i>(2),
+</a>and
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/errstr"><i>errstr</i>(2)),
+</a>the thread library
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/thread">(<i>thread</i>(2)),
+</a>formatted printing
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/print">(<i>print</i>(2)
+</a>and
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/fmtinstall"><i>fmtinstall</i>(2)),
+</a>security
+(many pages in section 2, including
+<a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/auth"><i>auth</i>(2),
+</a><a href="https://web.archive.org/web/20150205030051/http://plan9.bell-labs.com/magic/man2html/2/authsrv"><i>authsrv</i>(2)),
+</a>and many others.
+<br> <br>
+The changes are sweeping and are accompanied by many new programs, tools,
+services,
+and libraries.
+See the manual pages and the accompanying documents for more information.
+<br> <br>
+<br> <br>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+Bell Labs
+<br>
+Computing Science Research Center
+<br>
+Murray Hill NJ
+<br>
+April, 2002
+<br> <br>
+<a href="https://web.archive.org/web/20150205030051/http://www.lucent.com/copyright.html">
+Copyright</a> © 2002 Lucent Technologies Inc.  All rights reserved.
+
+<!--
+     FILE ARCHIVED ON 03:00:51 Feb 05, 2015 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:10:47 Sep 20, 2020.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  CDXLines.iter: 17.659 (3)
+  PetaboxLoader3.datanode: 277.741 (4)
+  captures_list: 418.913
+  esindex: 0.012
+  exclusion.robots: 0.284
+  exclusion.robots.policy: 0.271
+  PetaboxLoader3.resolve: 212.75 (2)
+  load_resource: 161.939
+  LoadShardBlock: 375.777 (3)
+  RedisCDXSource: 21.69
+--></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></body></html>

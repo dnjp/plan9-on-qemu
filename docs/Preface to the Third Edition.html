@@ -1,0 +1,176 @@
+
+<!-- saved from url=(0091)https://web.archive.org/web/20150205030100/http://plan9.bell-labs.com/sys/man/preface3.html -->
+<html><script data-dapp-detection="">
+(function() {
+  let alreadyInsertedMetaTag = false
+
+  function __insertDappDetected() {
+    if (!alreadyInsertedMetaTag) {
+      const meta = document.createElement('meta')
+      meta.name = 'dapp-detected'
+      document.head.appendChild(meta)
+      alreadyInsertedMetaTag = true
+    }
+  }
+
+  if (window.hasOwnProperty('web3')) {
+    // Note a closure can't be used for this var because some sites like
+    // www.wnyc.org do a second script execution via eval for some reason.
+    window.__disableDappDetectionInsertion = true
+    // Likely oldWeb3 is undefined and it has a property only because
+    // we defined it. Some sites like wnyc.org are evaling all scripts
+    // that exist again, so this is protection against multiple calls.
+    if (window.web3 === undefined) {
+      return
+    }
+    __insertDappDetected()
+  } else {
+    var oldWeb3 = window.web3
+    Object.defineProperty(window, 'web3', {
+      configurable: true,
+      set: function (val) {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        oldWeb3 = val
+      },
+      get: function () {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        return oldWeb3
+      }
+    })
+  }
+})()</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./Preface to the Third Edition_files/analytics.js" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app58.us.archive.org';v.server_ms=789;archive_analytics.send_pageview({});});</script><script type="text/javascript" src="./Preface to the Third Edition_files/playback.bundle.js" charset="utf-8"></script>
+<script type="text/javascript" src="./Preface to the Third Edition_files/wombat.js" charset="utf-8"></script>
+<script type="text/javascript">
+  __wm.init("https://web.archive.org/web");
+  __wm.wombat("http://plan9.bell-labs.com/sys/man/preface3.html","20150205030100","https://web.archive.org/web/","web","/_static/",
+	      "1423105260","plan9.bell-labs.com");
+</script><meta name="dapp-detected">
+<link rel="stylesheet" type="text/css" href="./Preface to the Third Edition_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./Preface to the Third Edition_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+<title>
+preface3
+</title>
+</head><body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#330088" alink="#FF0044"><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  /*min-width:800px !important;*/
+}
+</style>
+<script>__wm.rw(0);</script>
+<div id="wm-ipp-base" lang="en" style="display: block; direction: ltr;">
+</div><div id="donato" style="position:relative;width:100%;">
+  <div id="donato-base">
+    <iframe id="donato-if" src="./Preface to the Third Edition_files/donate.html" scrolling="no" frameborder="0" style="width:100%; height:100%">
+    </iframe>
+  </div>
+</div><script type="text/javascript">
+__wm.bt(625,27,25,2,"web","http://plan9.bell-labs.com/sys/man/preface3.html","20150205030100",1996,"/_static/",["/_static/css/banner-styles.css?v=NHuXCfBH","/_static/css/iconochive.css?v=qtvMKcIJ"]);
+  __wm.rw(1);
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+<h1>Preface to the Third (2000) Edition
+</h1>
+<br> <br>
+A great deal has happened to Plan 9 in the five years since its last release.
+Although much of the system will seem familiar, hardly any aspect
+of it is unchanged.
+The kernel has been heavily reworked;
+the graphical environment completely rewritten;
+many commands added, deleted, or replaced;
+and the libraries greatly expanded.
+Underneath, though, the same approach to computing remains:
+a distributed system that uses file-like naming to access and
+control resources both local and remote.
+<br> <br>
+Some of the changes are sweeping:
+<dl>
+<dt></dt><dt> </dt><dd>
+Alef is gone, a casualty of the cost of maintaining multiple languages, compilers,
+and libraries in a diverse world,
+but its model for processes, tasks, and communication lives on
+in a new thread library for C.
+</dd><dt></dt><dt> </dt><dd>
+Support for color displays is much more general, building on a new
+alpha-blending graphical operator called
+<tt>draw</tt>
+that replaces the old
+<tt>bitblt</tt>.
+Plan 9 screens are now, discreetly, colorful.
+</dd><dt></dt><dt> </dt><dd>
+A new mechanism called plumbing connects applications together
+in a variety of ways, most obviously in the support of multimedia.
+</dd><dt></dt><dt> </dt><dd>
+The interfaces to the panoply of rotating storage devices have been
+unified and extended,
+while providing better support for having Plan 9 coexist with other
+operating systems on a single disk.
+</dd><dt></dt><dt> </dt><dd>
+Perhaps most important, this release of the system is being done under
+an open source agreement, providing cost-free source-level access to the
+software.
+</dd></dl>
+<br> <br>
+Plan 9 continues to be the work of many people.
+Besides those mentioned in the old preface,
+these people deserve particular note:
+Russ Cox did much of the work updating the graphics
+and creating the new disk and bootstrap model
+as well as providing a number of new commands;
+David Hogan ported Plan 9 to the Dec Alpha;
+and
+Sape Mullender wrote the new thread library.
+<br> <br>
+Other new contributors include
+Bruce Ellis,
+Charles Forsyth,
+Eric Van Hensbergen,
+and
+Tad Hunt.
+<br> <br>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+Bell Labs
+<br>
+Computing Science Research Center
+<br>
+Murray Hill NJ
+<br>
+June, 2000
+
+<br> <br>
+<a href="https://web.archive.org/web/20150205030100/http://www.lucent.com/copyright.html">
+Copyright</a> © 2000 Lucent Technologies Inc.  All rights reserved.
+
+<!--
+     FILE ARCHIVED ON 03:01:00 Feb 05, 2015 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:10:44 Sep 20, 2020.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  RedisCDXSource: 39.407
+  LoadShardBlock: 379.435 (3)
+  exclusion.robots.policy: 0.459
+  PetaboxLoader3.datanode: 321.283 (4)
+  exclusion.robots: 0.479
+  captures_list: 448.003
+  esindex: 0.017
+  PetaboxLoader3.resolve: 252.101 (2)
+  CDXLines.iter: 23.032 (3)
+  load_resource: 335.123
+--></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></body></html>

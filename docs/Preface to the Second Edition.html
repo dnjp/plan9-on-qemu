@@ -1,0 +1,208 @@
+
+<!-- saved from url=(0090)https://web.archive.org/web/20150205030110/http://plan9.bell-labs.com/sys/man/preface.html -->
+<html><script data-dapp-detection="">
+(function() {
+  let alreadyInsertedMetaTag = false
+
+  function __insertDappDetected() {
+    if (!alreadyInsertedMetaTag) {
+      const meta = document.createElement('meta')
+      meta.name = 'dapp-detected'
+      document.head.appendChild(meta)
+      alreadyInsertedMetaTag = true
+    }
+  }
+
+  if (window.hasOwnProperty('web3')) {
+    // Note a closure can't be used for this var because some sites like
+    // www.wnyc.org do a second script execution via eval for some reason.
+    window.__disableDappDetectionInsertion = true
+    // Likely oldWeb3 is undefined and it has a property only because
+    // we defined it. Some sites like wnyc.org are evaling all scripts
+    // that exist again, so this is protection against multiple calls.
+    if (window.web3 === undefined) {
+      return
+    }
+    __insertDappDetected()
+  } else {
+    var oldWeb3 = window.web3
+    Object.defineProperty(window, 'web3', {
+      configurable: true,
+      set: function (val) {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        oldWeb3 = val
+      },
+      get: function () {
+        if (!window.__disableDappDetectionInsertion)
+          __insertDappDetected()
+        return oldWeb3
+      }
+    })
+  }
+})()</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./Preface to the Second Edition_files/analytics.js" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app43.us.archive.org';v.server_ms=733;archive_analytics.send_pageview({});});</script><script type="text/javascript" src="./Preface to the Second Edition_files/playback.bundle.js" charset="utf-8"></script>
+<script type="text/javascript" src="./Preface to the Second Edition_files/wombat.js" charset="utf-8"></script>
+<script type="text/javascript">
+  __wm.init("https://web.archive.org/web");
+  __wm.wombat("http://plan9.bell-labs.com/sys/man/preface.html","20150205030110","https://web.archive.org/web/","web","/_static/",
+	      "1423105270","plan9.bell-labs.com");
+</script><meta name="dapp-detected">
+<link rel="stylesheet" type="text/css" href="./Preface to the Second Edition_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./Preface to the Second Edition_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+<title>
+preface
+</title>
+</head><body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#330088" alink="#FF0044"><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  /*min-width:800px !important;*/
+}
+</style>
+<script>__wm.rw(0);</script>
+<div id="wm-ipp-base" lang="en" style="display: block; direction: ltr;">
+</div><div id="donato" style="position:relative;width:100%;">
+  <div id="donato-base">
+    <iframe id="donato-if" src="./Preface to the Second Edition_files/donate.html" scrolling="no" frameborder="0" style="width:100%; height:100%">
+    </iframe>
+  </div>
+</div><script type="text/javascript">
+__wm.bt(625,27,25,2,"web","http://plan9.bell-labs.com/sys/man/preface.html","20150205030110",1996,"/_static/",["/_static/css/banner-styles.css?v=NHuXCfBH","/_static/css/iconochive.css?v=qtvMKcIJ"]);
+  __wm.rw(1);
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+<h1>Preface to the Second (1995) Edition
+</h1>
+<p>
+Plan 9 was born in the same lab where Unix began.
+Old Unix hands will recognize the cultural heritage in this manual,
+where venerable Unix commands live on,
+described in the classic Unix style.  Underneath, though, lies
+a new kind of system, organized around communication and
+naming rather than files and processes.
+</p>
+<p>
+In Plan 9, distributed computing is a central premise,
+not an evolutionary add-on.  The system relies on a
+uniform protocol to refer to and communicate
+with objects, whether they be data or processes, and whether or
+not they live on the same machine or even similar machines.
+A single paradigm (writing to named places) unifies
+all kinds of control and interprocess signaling.
+</p>
+<p>
+Name spaces can be built arbitrarily.  In particular all
+programs available to a given user are customarily united
+in a single logical directory.
+Temporary files and
+untrusted activities can be confined in isolated spaces.
+When a portable machine connects to the
+central, archival file system, the machine's local
+name space is joined smoothly to that of the archival file system.
+The architecture affords other unusual abilities, including:
+</p>
+<dl>
+<dt></dt><dt> </dt><dd>
+Objects in name spaces imported from other machines (even from
+foreign systems such as MS-DOS) are transparently accessible.
+</dd><dt></dt><dt> </dt><dd>
+Windows appear in name spaces on a par with files and processes.
+</dd><dt></dt><dt> </dt><dd>
+A historical file system allows one to navigate
+the archival file system in time as well as in space;
+backup files are always at hand.
+</dd><dt></dt><dt> </dt><dd>
+A debugger can handle simultaneously active processes
+on disparate kinds of hardware.
+</dd></dl>
+<p>
+The character set of Plan 9 is Unicode, which
+covers most of the world's major scripts.
+The system has its own programming languages:
+a dialect of C with simple inheritance, a simplified shell, 
+and a CSP-like concurrent language, Alef.
+An ANSI-POSIX emulator (APE) admits unreconstructed Unix code.
+</p>
+<p>
+Plan 9 is the work of many people.
+The protocol was begun by Ken Thompson; naming
+was integrated by Rob Pike and networking by Dave Presotto.
+Phil Winterbottom simplified the management of name spaces
+and re-engineered the system.
+They were joined by Tom Killian, Jim McKie, and Howard Trickey in
+bringing the system up on various machines and making
+device drivers.
+Thompson made the C compiler;
+Pike, window systems;
+Tom Duff, the shell and raster graphics;
+Winterbottom, Alef;
+Trickey, Duff, and Andrew Hume, APE.
+Bob Flandrena ported a myriad of
+programs to Plan 9.
+Other contributors include
+Alan Berenbaum,
+Lorinda Cherry,
+Bill Cheswick,
+Sean Dorward,
+David Gay,
+Paul Glick,
+Eric Grosse,
+John Hobby,
+Gerard Holzmann,
+Brian Kernighan,
+Bart Locanthi,
+Doug McIlroy,
+Judy Paone,
+Sean Quinlan,
+Bob Restrick,
+Dennis Ritchie,
+Bjarne Stroustrup,
+and
+Cliff Young.
+</p>
+<p>
+Plan 9 is made available as is, without formal support, but
+substantial comments or contributions may be communicated to
+the authors.
+<br> <br>
+</p><dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+<dl><dt></dt><dd>
+Doug McIlroy
+<br>
+March, 1995
+
+<p></p>
+<br> <br>
+<a href="https://web.archive.org/web/20150205030110/http://www.lucent.com/copyright.html">
+Copyright</a> © 2000 Lucent Technologies Inc.  All rights reserved.
+
+<!--
+     FILE ARCHIVED ON 03:01:10 Feb 05, 2015 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:10:46 Sep 20, 2020.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  LoadShardBlock: 536.404 (3)
+  captures_list: 588.538
+  RedisCDXSource: 12.476
+  PetaboxLoader3.resolve: 141.467 (2)
+  exclusion.robots.policy: 0.461
+  load_resource: 134.242
+  PetaboxLoader3.datanode: 499.687 (4)
+  CDXLines.iter: 32.594 (3)
+  exclusion.robots: 0.482
+  esindex: 0.021
+--></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></body></html>
