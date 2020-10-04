@@ -291,7 +291,7 @@ Reboot the VM with the `fshalt` command:
 # Ports
 
 There are ports of some unix tools and other applications that run on
-Plan 9 in the front ports. All you have to do is clone the ports tree
+Plan 9 in the 9front ports. All you have to do is clone the ports tree
 into your system:
 
 ```
@@ -443,9 +443,7 @@ installation:
 Then we'll download both the bootstrap and target versions of Go:
 
 ```
-%: hget
-http://www.9legacy.org/download/go/go1.14.1-plan9-amd64-bootstrap.tbz | bunzip2
--c | tar x
+%: hget http://www.9legacy.org/download/go/go1.14.1-plan9-amd64-bootstrap.tbz | bunzip2 -c | tar x
 
 %: hget https://golang.org/dl/go1.14.7.src.tar.gz | gunzip -c | tar x
 ```
