@@ -12,7 +12,7 @@ be executed in the Plan 9 VM.
 ## Installation
 
 The
-[installscript](https://github.com/danieljamespost/plan9-on-qemu/blob/master/run.sh)
+[install script](https://github.com/danieljamespost/plan9-on-qemu/blob/master/run.sh)
 script can setup [9front](http://9front.org/),
 [9front-ANTS](http://ants.9gridchan.org/), or the
 [9legacy](http://9legacy.org/) distribution.
