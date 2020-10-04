@@ -137,6 +137,25 @@ All that's left is to enable the user:
 If the above fails, make sure that the auth/cpu kernel is running in
 your plan9.ini. To be sure, set `server=cpu` in the plan9.ini.
 
+## Setup Timezone
+
+The available timezones are simply files in `/adm/timezone`.  To
+select a timezone, copy your selection to `/adm/timezone/local`:
+
+```
+%: cp /adm/timezone/<your selection> /adm/timezone/local
+```
+
+Then open up `/rc/bin/termrc` in sam or acme and change the
+TIMESYNCARGS:
+
+
+```
+TIMESYNCARGS=(-n pool.ntp.org)
+```
+
+Then restart your system with `fshalt -r`.
+
 ## Setup keyboard
 
 If you use a fairly standard layout, you're desired settings can most
