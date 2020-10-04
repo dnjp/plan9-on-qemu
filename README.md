@@ -1,45 +1,48 @@
-# Running 9front in Qemu
+# Running Plan 9 in Qemu
 
 This guide assumes you are running a x86-64 Linux machine and that you have an
-up to date version of Qemu and curl installed.
+up to date version of Qemu and curl installed. You may want to clone
+[the repo](https://github.com/danieljamespost/plan9-on-qemu) containing useful
+scripts to help you get started.
 
 In the shell examples below, any snippet starting with `$: ` means that it
 should be executed on your Linux machine. Any snippet starting with `%: ` should
-be executed in the 9front VM.
+be executed in the Plan 9 VM.
 
 ## Installation
 
-To download the 9front ISO and star the installer in Qemu, execute the
-[install script](./install.sh) script:
+The
+[installscript](https://github.com/danieljamespost/plan9-on-qemu/blob/master/run.sh)
+script can setup [9front](http://9front.org/),
+[0front-ANTS](http://ants.9gridchan.org/), or the
+[9legacy](http://9legacy.org/) distribution.
 
-```
-$: ./install.sh
-```
-
-Stick with the default options up until 9front boots up. When asked what input
-device you would like to use, enter `ps2intellimouse`.
-
-You are now ready to install 9front. To do so, follow the install guide from the
-[9front FQA](http://fqa.9front.org/fqa4.html#4.1)
-
-When the installation is complete and you are kicked back out to the tty,
-shutdown the Qemu machine.
-
-Now you can simply execute the [run script](./run.sh) to boot up 9front:
+Execute the install script and answer the prompts to install your selected distibution:
 
 ```
 $: ./run.sh
 ```
 
+Stick with the default options up until Plan 9 boots up. When asked what input
+device you would like to use, enter `ps2intellimouse`.
+
+You are now ready to install Plan 9. To do so, follow the install guide from the
+[9front FQA](http://fqa.9front.org/fqa4.html#4.1)
+
+When the installation is complete and you are kicked back out to the tty,
+shutdown the Qemu machine.
+
+Now you can simply execute the [run script](https://github.com/danieljamespost/plan9-on-qemu/blob/master/run.sh) and select "run" to boot up your selected image.
+
 ## Setting Resolution
 
-- obtain a list of vesa bios modes
+Obtain a list of vesa bios modes
 
 ```
 %: @{rfork n; aux/realemu; aux/vga -p}
 ```
 
-- configure one of the valid modes
+Configure one of the valid modes
 
 ```
 %: @{rfork n; aux/realemu; aux/vga -m vesa -l 1024x768x16}
@@ -50,29 +53,123 @@ reboot the VM. To do that, modify the `vgasize` option in the `plan9.ini` file.
 
 ## Modifying plan9.ini
 
-- Mount 9fat partition:
-
-```
-%: 9fs 9fat
-```
-
-- Bind the local hard drive kernel device over /dev
+Bind the local hard drive kernel device over /dev
 
 ```
 %: bind -b '#S' /dev
 ```
 
-- Specify the full path to the corresponding 9fat
+Specify the full path to the corresponding 9fat
 
 ```
-%: 9fs 9fat /dev/sdXX/9fat
+%: 9fs 9fat /dev/<your hd>/9fat
 ```
 
-- Edit the file `/n/9fat/plan9.ini` to configure your desired boot settings
+Edit the file `/n/9fat/plan9.ini` to configure your desired boot settings.
+
+If the above does not work on your system, give
+[this script](https://github.com/danieljamespost/plan9-on-qemu/blob/master/run.sh)
+a try.
+
+
+## Create your own user
+
+"glenda" is the default user on Plan 9. However, you will likely want
+to create a user for yourself.
+
+To do so, we will first connect to the Fossil file server console and
+create the new user:
+
+```
+%: con -l /srv/fscons
+```
+
+Once connected, your prompt will change to simply "prompt: ". First,
+create your user:
+
+```
+prompt: uname <username> <username>
+```
+
+Then you can add your user to the groups that make sense. To give your
+user system priveledges, add yourself to the `sys` group:
+
+```
+prompt: uname <username> +sys
+```
+
+```
+prompt: uname sys +<username>
+```
+
+If you want access to `/adm` then add your user to the adm group:
+
+```
+prompt: uname adm +<username>
+```
+
+Type `CTL+\` and then type `q` at the prompt:
+
+```
+>>> q
+```
+
+Now that the file system knows about our new user, we need to configure
+and enable the new user. First we'll start keyfs so we can change
+authentication information:
+
+```
+%: auth/keyfs
+```
+
+Then we will configure the user:
+
+```
+%: auth/changeuser <username>
+```
+
+All that's left is to enable the user:
+
+```
+%: auth/enable <username>
+```
+
+If the above fails, make sure that the auth/cpu kernel is running in
+your plan9.ini. To be sure, set `server=cpu` in the plan9.ini.
+
+## Setup keyboard
+
+If you use a fairly standard layout, you're desired settings can most
+easily be changed with kbmap:
+
+```
+%: kbmap
+```
+
+Right click your desired setting and then type "q" to quit.
+
+If you're using a layout like [Colemak](https://colemak.com/)
+(your truly), then you can add the layout I have
+[here](https://github.com/danieljamespost/plan9-on-qemu/blob/master/extra/colemak)
+to kbmap:
+
+```
+%: hget https://github.com/danieljamespost/plan9-on-qemu/blob/master/extra/colemak > /sys/lib/kbmap/colemak
+```
+
+Then just run `kbmap` as above and select "colemak".
+
+To persist these settings add something like the following to your
+`$home/lib/profile` directly above `rio` in the `terminal` case statement:
+
+
+```
+cat /sys/lib/kbmap/colemak > /dev/kbmap
+```
 
 ## Configure Rio
 
-Open up your `$home/lib/profile` with either `sam` or `acme`:
+Open up your `$home/lib/profile` with either `sam` or `acme`
 
 ```
 %: sam $home/lib/profile
@@ -96,6 +193,17 @@ this:
 ```
 rio -b -s -i riostart
 ```
+
+If `$home/bin/rc/riostart` does not exist, create a mostly empty script
+that looks like this for now:
+
+```
+#!/bin/rc
+
+```
+
+Then make it executable with `chmod +x $home/bin/rc/riostart`
+
 
 To automatically start DHCP when rio starts, add this line above the `switch`
 statement:
@@ -161,12 +269,45 @@ Reboot the VM with the `fshalt` command:
 %: fshalt -r
 ```
 
+# Ports
+
+There are ports of some unix tools and other applications that run on
+Plan 9 in the front ports. All you have to do is clone the ports tree
+into your system:
+
+```
+% hg clone http://code.9front.org/hg/ports /sys/ports
+```
+
+Then to install a port, for example `media-fonts`, you would do this:
+
+```
+%: cd /sys/ports/media-fonts
+%: mk nuke
+%: mk build
+%: mkdir /lib/font/ttf
+%: mk install
+```
+
+
 ## Setup Git
 
-First, we need to obtain [git9](https://github.com/oridb/git9) a git implementation for Plan 9 by Ori
-Bernstein ([oridb](https://github.com/oridb)). We will do this in two parts. First, we'll get a bootstrap
-version which will give us the `git` command and then we will setup the git9
-repository in a place that you can easily update it in the future.
+ [git9](https://github.com/oridb/git9) is a git implementation for Plan
+ 9 by Ori
+Bernstein ([oridb](https://github.com/oridb)) that works quite well on
+Plan 9. There are two ways to install git9 - using 9front Ports or via
+git for the most up to date changes.
+
+Using 9front Ports, the installation is very straight forward:
+
+```
+%: cd /sys/ports/dev-vcs/git9
+%: mk install
+```
+
+For the git install, we'll first  get a bootstrap version which will
+give us the `git` command and then we will setup the git9 repository in
+a place that you can easily update it in the future.
 
 Get the bootstrap version:
 
@@ -229,6 +370,7 @@ authenticate using those keys:
 ```
 %: cat $home/lib/ssh/key >/mnt/factotum/ctl
 %: ssh git@github.com
+%: ssh git@git.sr.ht
 ```
 You should get a success message saying that you have authenticated to Github in
 this case. You may also get an error message saying that Github does not provide
@@ -243,6 +385,21 @@ git+ssh instead of https. You can do that with a command like this:
 
 ```
 %: git/push -u git+ssh://git@github.com/youruser/yourrepo
+```
+
+For [Sourcehut](https://sourcehut.org/), you'll need to use ssh/git+ssh for read/write:
+
+```
+%: git/clone ssh://git@git.sr.ht/~youruser/yourrepo
+%: git/clone git+ssh://git@git.sr.ht:~youruser/yourrepo
+```
+
+An example configuration might look like this:
+
+```
+[remote "origin"]
+    url = git+ssh://git@git.sr.ht:~youruser/yourrepo
+    fetch = +refs/heads/*:refs/remotes/origin/*
 ```
 
 ## Install Go
@@ -319,7 +476,7 @@ cleanup:
 ```
 
 Next you will want to add a line like the following to your `profile` so that
-you can run executables in your GOPATH. 
+you can run executables in your GOPATH.
 
 ```
 bind -a $home/go/bin /bin
@@ -327,3 +484,12 @@ bind -a $home/go/bin /bin
 
 This is the equivalent of `export PATH=$PATH:/some/path` on Unix.
 
+# Next Steps
+
+I will continue to keep this post updated with relevant information to make sure
+it's always up to date. If there is anything that you feel is missing, feel free
+to file an issue in Github.
+
+You may want to take a look at the [Plan 9
+Wiki](https://9p.io/wiki/plan9/plan_9_wiki/) which contains useful articles and
+links which should help you get more familiar with Plan 9.
