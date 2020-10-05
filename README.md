@@ -501,6 +501,12 @@ bind -a $home/go/bin /bin
 
 This is the equivalent of `export PATH=$PATH:/some/path` on Unix.
 
+Now you'll need to get a ca cert for building most go modules:
+
+```
+%: hget https://curl.haxx.se/ca/cacert.pem >/sys/lib/tls/ca.pem
+```
+
 # Next Steps
 
 I will continue to keep this post updated with relevant information to make sure
