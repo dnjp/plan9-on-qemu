@@ -1,0 +1,26 @@
+#!/bin/sh
+# initqemu
+set -ex
+
+ext=eno1
+net=192.168.100.0/24
+gw=192.168.100.254/24
+ip=192.168.100.1
+
+modprobe tun
+vde_switch -tap tap0 -daemon -mod 660 -group users
+
+ip a add $gw dev tap0
+ip l set tap0 up
+
+echo 1 >/proc/sys/net/ipv4/ip_forward
+echo 50 >/sys/module/kvm/parameters/min_timer_period_us
+
+iptables -t nat -A POSTROUTING -s $net -o $ext -j MASQUERADE
+
+for i in 564 567 17010 17019
+do
+	iptables -t nat -A PREROUTING -i $ext -p tcp --dport $i -j DNAT --to $ip:$i
+done
+
+dnsmasq --interface=tap0 --bind-interfaces --dhcp-range=$ip,$ip

@@ -1,0 +1,150 @@
+# create work dir
+mkdir q
+cd q
+
+# get the latest .iso from http://9front.org/iso/,
+# for example:
+wget http://9front.org/iso/9front-5048.e16a172bcae6.iso.bz2
+bunzip2 9front-5048.e16a172bcae6.iso.bz2
+ln -s 9front-5048.e16a172bcae6.iso 9front.iso
+
+# create disk image
+qemu-img create -f qcow2 9front.qcow2.img 20G
+
+# download helper scripts for qemu
+wget http://www.plan9.fi/qemu/initqemu
+wget http://www.plan9.fi/qemu/qemu9
+chmod a+x initqemu qemu9
+
+# read "initqemu" and adjust it as needed, then
+# setup networking for qemu
+su root ./initqemu
+
+# run the 9front installer
+./qemu9 9front.qcow2.img 9front.iso &
+
+# during installation, refer to
+# http://fqa.9front.org/fqa4.html for details.
+#
+# choose "hjfs" as the file server and "dhcp" to
+# configure the network.
+#
+# after "finish" step, kill the qemu process, and
+# boot the installed 9front:
+./qemu9 9front.qcow2.img &
+
+# now convert the stand-alone terminal installation to
+# a stand-alone cpu/auth/file server:
+#
+# run the following commands on the 9front guest as glenda
+#
+# for details, refer to http://fqa.9front.org/fqa7.html
+#
+# here we assume that
+#   the hostowner (= authid) is "glenda",
+#   your username is "foo", and
+#   the authdom is "example.com"
+
+# add your user "foo" on the file server
+echo newuser foo >>/srv/hjfs.cmd
+
+# configure nvram:
+# set authid: glenda
+# authdom: example.com
+# secstore key can be left empty
+# password: set glenda's password here
+auth/wrkey
+
+# configure kernel to be a "cpu" kernel:
+
+# mount /n/9fat
+9fs 9fat
+
+# then edit /n/9fat/plan9.ini and add line:
+service=cpu
+
+# to make the host boot without prompt, add also
+# "nobootprompt=" line (which should have the same value
+# as the existing "bootargs=" line), e.g.:
+nobootprompt=local!/dev/sd00/fs -m 192 -A
+
+# configure the auth server:
+
+# add users to the auth server and
+# set their passwords
+# glenda's password must match the one given to auth/wrkey
+auth/keyfs
+auth/changeuser glenda
+auth/changeuser foo
+
+# edit /lib/ndb/local:
+#
+# here we assume that
+#   the sysname is "9front" (set during installation),
+#   the IP is 192.168.100.1/24 (from DHCP), and
+#   the mac is 5254cafebabe (set by "qemu9")
+#
+# add after the last line (which should be e.g.
+# sys=9front ether=5254cafebabe):
+
+ipnet=9front ip=192.168.100.0 ipmask=255.255.255.0
+	auth=192.168.100.1
+	authdom=example.com
+
+# reboot (9front will start now in non-graphics mode)
+fshalt -r
+
+# you should now be able to connect to the 9front guest
+# from the Linux host using drawterm (you can get
+# version supporting latest 9front features from
+# http://drawterm.9front.org/)
+drawterm -h 192.168.100.1 -a 192.168.100.1 -u foo
+
+# alternatively you can use the http://www.plan9.fi/qemu/dt
+# wrapper for convenience
+dt 192.168.100.1 foo
+
+# after connecting as "foo" run the "newuser" script to
+# enable graphics etc.
+# (with glenda, just edit lib/profile and reconnect)
+/sys/lib/newuser
+
+# optional step: compile amd64 userspace and kernel:
+
+# if you're not glenda, open glenda shell
+rcpu -h $sysname -u glenda
+
+# download helper scripts
+cd
+hget http://www.plan9.fi/rc/sysbuild >bin/rc/sysbuild
+hget http://www.plan9.fi/rc/sysrev >bin/rc/sysrev
+chmod a+x bin/rc/sysbuild
+chmod a+x bin/rc/sysrev
+
+# read "sysbuild" and refer to
+# http://fqa.9front.org/fqa5.html for details, then
+# put the rio window to scroll mode, and build
+# both the 386 and amd64 userspace and kernel by:
+sysupdate
+sysbuild
+
+# after successful build, copy the kernels to 9fat
+sysbuild -k
+
+# to take the amd64 kernel into use you must edit
+# plan9.ini before reboot:
+
+# mount /n/9fat
+bind -b '#S' /dev
+9fs 9fat
+
+# edit /n/9fat/plan9.ini and change
+# "bootfile=9pc" line to:
+bootfile=9pc64
+
+# reboot
+fshalt -r
+
+# check the architecture and revision of the sources
+echo $cputype
+sysrev

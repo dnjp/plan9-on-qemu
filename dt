@@ -1,0 +1,13 @@
+#!/bin/sh
+# dt: drawterm to a standalone cpu/auth/file server
+
+case $# in
+2)
+	;;
+*)
+	echo usage: dt server user 1>&2
+	exit 1
+	;;
+esac
+
+exec drawterm -h $1 -a $1 -u $2 &
