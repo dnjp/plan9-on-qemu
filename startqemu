@@ -1,6 +1,0 @@
-#!/bin/sh
-# startqemu
-set -e
-cd ~/q
-su root ./initqemu
-./qemu9 9front.qcow2.img &
