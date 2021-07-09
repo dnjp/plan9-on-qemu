@@ -5,7 +5,7 @@ mem=4G
 iso_file='9front.iso'
 out_file='9front.iso.gz'
 image_name='9front.qcow2.img'
-image_url='http://9front.org/iso/9front-8013.d9e940a768d1.amd64.iso.gz'
+image_url='http://9front.org/iso/9front-8392.16c5ead832f2.386.iso.gz'
 unpack_cmd='gunzip'
 
 install() {
@@ -83,10 +83,10 @@ run() {
 		# -drive if=none,id=vd0,file=$image_name \
 		# -device scsi-hd,drive=vd0 
 		
-	qemu-system-x86_64 -cpu host -enable-kvm -m $mem \
+	qemu-system-x86_64 -m $mem \
 		-net nic,model=virtio,macaddr=52:54:00:00:EE:03 \
-		-net user,hostfwd=tcp::17019-:17019 -net vde -device virtio-scsi-pci,id=scsi \
-		-soundhw sb16 -usb -drive if=none,id=vd0,file=$image_name \
+		-net user,hostfwd=tcp::17019-:17019 -device virtio-scsi-pci,id=scsi \
+		-device sb16 -usb -drive if=none,id=vd0,file=$image_name \
 		-device scsi-hd,drive=vd0		
 }
 
